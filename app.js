@@ -1,5 +1,13 @@
+import * as tf from "@tensorflow/tfjs"
+
+const model = tf.sequential();
+model.add(tf.layers.dense({units: 5, activation: 'sigmoid', inputShape: [81]}));
+model.add(tf.layers.dense({ units: 4, activation: 'softmax' , outputShape: [2] }));
+ 
+model.compile({loss: 'categoricalCrossentropy', optimizer: tf.train.adam(0.1)});
+
 function BANG(){
-    console.log("ABANG BOLA")
+    console.log(tf.version)
 }
 function mapping(kelas){
     if (kelas=='A'){
@@ -24,8 +32,6 @@ function sendArray(){
         res.push(parseInt(x[i].innerText))
     }
     let val = select.options[select.selectedIndex].value
-    //console.log(mapping(val))
-    //console.log(res)
     
     return {"res":res,"y":val,"y_encode":mapping(val)}
 }
@@ -101,8 +107,17 @@ function clean(){
     })
 }
 
+function train(){
+    const xs = tf.tensor2d(X)
+    const ys = tf.tensor2d(y)
+    console.log(xs.shape)
+    console.log(ys.shape)
+    console.log(model.summary())
+}
+
 window.generateTable = generateTable
 window.clean = clean
 window.BANG = BANG
 window.getClick = getClick
 window.saveDS = saveDS
+window.train = train
