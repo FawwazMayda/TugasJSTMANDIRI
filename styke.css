@@ -9,3 +9,8 @@ table {
     height: 450px;
 
 }
+
+#table-res {
+    display: inline-block;
+    float: right;
+}

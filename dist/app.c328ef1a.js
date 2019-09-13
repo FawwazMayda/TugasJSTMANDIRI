@@ -136,7 +136,8 @@ function mapping(kelas) {
 
 function sendArray() {
   var res = [];
-  var x = document.querySelectorAll("td");
+  var dom = document.getElementById("matrix-table");
+  var x = dom.querySelectorAll("td");
   var select = document.getElementById("s");
 
   for (var i = 0; i < x.length; i++) {
@@ -163,6 +164,7 @@ function gantiWarna() {
 function generateTable() {
   var count = 0;
   var tb1 = document.createElement("table");
+  tb1.id = "matrix-table";
   var tb1Body = document.createElement("tbody");
 
   for (var i = 0; i < 9; i++) {
@@ -224,7 +226,7 @@ function getClick() {
 }
 
 function clean() {
-  var mm = document.getElementById("matrix");
+  var mm = document.getElementById("matrix-table");
   mm.querySelectorAll("td").forEach(function (n) {
     n.innerText = 0;
     n.style.backgroundColor = "white";
@@ -264,7 +266,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55743" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56298" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -17,7 +17,8 @@ function mapping(kelas){
 
 function sendArray(){
     let res = []
-    var x = document.querySelectorAll("td")
+    var dom = document.getElementById("matrix-table")
+    var x = dom.querySelectorAll("td")
     var select = document.getElementById("s")
     for(let i=0;i<x.length;i++){
         res.push(parseInt(x[i].innerText))
@@ -38,6 +39,7 @@ function gantiWarna(){
 function generateTable(){
     let count = 0
     var tb1 = document.createElement("table")
+    tb1.id="matrix-table"
     var tb1Body = document.createElement("tbody")
 
     for(let i=0; i<9;i++){
@@ -92,7 +94,7 @@ function getClick(){
 }
 
 function clean(){
-    var mm = document.getElementById("matrix")
+    var mm = document.getElementById("matrix-table")
     mm.querySelectorAll("td").forEach(n=> {
         n.innerText = 0
         n.style.backgroundColor = "white"
