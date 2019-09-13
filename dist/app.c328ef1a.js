@@ -36418,13 +36418,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var model = tf.sequential();
 model.add(tf.layers.dense({
   units: 5,
-  activation: 'sigmoid',
+  activation: 'relu',
   inputShape: [81]
 }));
 model.add(tf.layers.dense({
   units: 4,
-  activation: 'softmax',
-  outputShape: [2]
+  activation: 'softmax'
 }));
 model.compile({
   loss: 'categoricalCrossentropy',
@@ -36436,6 +36435,18 @@ function BANG() {
 }
 
 function mapping(kelas) {
+  if (typeof kelas == 'number') {
+    if (kelas == 0) {
+      return 'A';
+    } else if (kelas == 1) {
+      return 'B';
+    } else if (kelas == 2) {
+      return 'C';
+    } else if (kelas == 4) {
+      return 'V';
+    }
+  }
+
   if (kelas == 'A') {
     return [1, 0, 0, 0];
   } else if (kelas == 'B') {
@@ -36550,6 +36561,35 @@ function train() {
   console.log(xs.shape);
   console.log(ys.shape);
   console.log(model.summary());
+  model.fit(xs, ys, {
+    epochs: 5
+  }).then(function () {
+    console.log("Fit is Done");
+  });
+}
+
+function predict() {
+  //Doing the TensorFlow Stuff and Collecting the Array
+  var ress = [];
+  var res = [];
+  var dom = document.getElementById("matrix-table");
+  var x = dom.querySelectorAll("td");
+
+  for (var i = 0; i < x.length; i++) {
+    res.push(parseInt(x[i].innerText));
+  }
+
+  ress.push(res);
+  var ts = tf.tensor2d(ress);
+  console.log(ts.shape);
+  var hs = model.predict(ts);
+  var kelas = tf.argMax(tf.squeeze(hs));
+  var kelas_encode = kelas.arraySync(); //Displaying DOM
+
+  var el = document.getElementById("PRED-RES");
+  var h3 = document.createElement("h3");
+  h3.innerText = Array(hs).join(" ") + "=================>" + mapping(kelas_encode);
+  el.insertAdjacentElement('afterbegin', h3);
 }
 
 window.generateTable = generateTable;
@@ -36558,6 +36598,7 @@ window.BANG = BANG;
 window.getClick = getClick;
 window.saveDS = saveDS;
 window.train = train;
+window.predict = predict;
 },{"@tensorflow/tfjs":"node_modules/@tensorflow/tfjs/dist/tf.esm.js"}],"../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -36586,7 +36627,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56961" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58999" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

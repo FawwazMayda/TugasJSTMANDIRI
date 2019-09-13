@@ -1,15 +1,27 @@
 import * as tf from "@tensorflow/tfjs"
 
 const model = tf.sequential();
-model.add(tf.layers.dense({units: 5, activation: 'sigmoid', inputShape: [81]}));
-model.add(tf.layers.dense({ units: 4, activation: 'softmax' , outputShape: [2] }));
+model.add(tf.layers.dense({units: 5, activation: 'relu', inputShape: [81]}));
+model.add(tf.layers.dense({ units: 4, activation: 'softmax'}));
  
 model.compile({loss: 'categoricalCrossentropy', optimizer: tf.train.adam(0.1)});
 
 function BANG(){
     console.log(tf.version)
+
 }
 function mapping(kelas){
+    if(typeof kelas =='number'){
+        if(kelas==0){
+            return 'A'
+        } else if (kelas==1){
+            return 'B'
+        } else if (kelas==2){
+            return 'C'
+        } else if (kelas==4){
+            return 'V'
+        }
+    }
     if (kelas=='A'){
         return [1,0,0,0]
     } else if(kelas=='B'){
@@ -113,6 +125,32 @@ function train(){
     console.log(xs.shape)
     console.log(ys.shape)
     console.log(model.summary())
+    model.fit(xs,ys,{epochs:5}).then(()=> {
+        console.log("Fit is Done")
+    })   
+}
+
+function predict(){
+    //Doing the TensorFlow Stuff and Collecting the Array
+    let ress = []
+    let res = []
+    var dom = document.getElementById("matrix-table")
+    var x = dom.querySelectorAll("td")
+    for(let i=0;i<x.length;i++){
+        res.push(parseInt(x[i].innerText))
+    }
+    ress.push(res)
+    var ts = tf.tensor2d(ress)
+    console.log(ts.shape)
+    var hs = model.predict(ts)
+    var kelas = tf.argMax(tf.squeeze(hs))
+    var kelas_encode = kelas.arraySync()
+    
+    //Displaying DOM
+    var el = document.getElementById("PRED-RES")
+    var h3 = document.createElement("h3")
+    h3.innerText = Array(hs).join(" ") + "=================>"+mapping(kelas_encode)
+    el.insertAdjacentElement('afterbegin',h3)
 }
 
 window.generateTable = generateTable
@@ -121,3 +159,4 @@ window.BANG = BANG
 window.getClick = getClick
 window.saveDS = saveDS
 window.train = train
+window.predict = predict
